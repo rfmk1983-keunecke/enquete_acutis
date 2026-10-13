@@ -39,3 +39,13 @@ Acesse `http://127.0.0.1:8000/admin/`.
 - Administrador com acesso direto ao banco pode alterar registros; CSV é evidência de auditoria simples, não trilha criptográfica imutável.
 - Para uso com menores, obtenha autorização/validação da escola, minimize dados, restrinja acesso e estabeleça prazo de retenção e exclusão, observando a LGPD. Não divulgue a lista de votos nem fotos sem autorização.
 - Um e-mail só pode votar uma vez, mesmo se pertencer a candidato; candidatos podem votar em outras pessoas.
+
+
+## NOVO PAINEL SIMPLIFICADO (v2)
+
+- Abra `https://SEU-SITE.onrender.com/gestao/` e entre com as mesmas credenciais do administrador anterior.
+- Configure a eleição, cadastre/edite/exclua candidatos, inicie ou encerre a votação e acesse os resultados/auditoria.
+- O Django Admin original continua acessível em `/admin/`, mas não é necessário para a operação normal.
+- **Atualização segura:** substitua/adicione os arquivos desta versão no repositório existente; mantenha `DATABASE_URL` e demais variáveis. Não apague o banco Supabase nem execute `flush`.
+- Se o GitHub tiver os arquivos dentro de uma pasta `eleicao_escolar`, copie os arquivos preservando esta estrutura. Se estiverem na raiz, copie o conteúdo interno da pasta.
+- Execute testes com eleitores fictícios antes de liberar à escola. A identidade dos eleitores por nome/e-mail ainda não é verificada.
