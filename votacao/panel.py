@@ -167,3 +167,39 @@ def change_status(request, action):
         else:
             messages.error(request,'Esta ação não está disponível no momento.')
     return redirect('manage_dashboard')
+
+
+@admin_required
+@require_http_methods(['GET', 'POST'])
+def reset_election(request):
+    """Clear a TEST run and return the single election to draft, retaining candidates.
+
+    This is destructive. Require staff password and an explicit confirmation phrase.
+    The election lock serializes this operation with vote creation.
+    """
+    election = Election.objects.first()
+    if not election:
+        messages.error(request, 'Não existe eleição para reiniciar.')
+        return redirect('manage_dashboard')
+    if request.method == 'POST':
+        if request.POST.get('confirmation', '').strip() != 'REINICIAR':
+            messages.error(request, 'Digite REINICIAR para confirmar.')
+        elif not request.user.check_password(request.POST.get('password', '')):
+            messages.error(request, 'Senha de administrador incorreta.')
+        else:
+            with transaction.atomic():
+                locked = Election.objects.select_for_update().get(pk=election.pk)
+                # QuerySet.delete() intentionally bypasses Vote.delete(); only used here
+                # after password verification, explicit confirmation, and row lock.
+                removed, _ = Vote.objects.filter(election=locked).delete()
+                # Model.save() prohibits closed -> draft; controlled reset is the
+                # only allowed exception and is deliberately performed via update().
+                Election.objects.filter(pk=locked.pk).update(
+                    status=Election.DRAFT, started_at=None, ended_at=None)
+            messages.success(request, f'Eleição reiniciada! {removed} voto(s) de teste excluído(s). Candidatos preservados.')
+            return redirect('manage_dashboard')
+    return render(request, 'votacao/manage/reset.html', {
+        'election': election,
+        'votes_count': election.votes.count(),
+        'candidates_count': election.candidates.count(),
+    })

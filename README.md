@@ -49,3 +49,14 @@ Acesse `http://127.0.0.1:8000/admin/`.
 - **Atualização segura:** substitua/adicione os arquivos desta versão no repositório existente; mantenha `DATABASE_URL` e demais variáveis. Não apague o banco Supabase nem execute `flush`.
 - Se o GitHub tiver os arquivos dentro de uma pasta `eleicao_escolar`, copie os arquivos preservando esta estrutura. Se estiverem na raiz, copie o conteúdo interno da pasta.
 - Execute testes com eleitores fictícios antes de liberar à escola. A identidade dos eleitores por nome/e-mail ainda não é verificada.
+
+
+## Reiniciar eleição de teste (painel v3)
+
+Acesse `/gestao/` → **Gerenciar reinício da votação** (ou `/gestao/reiniciar/`).
+Faça download da auditoria antes, digite `REINICIAR` e informe a senha do usuário logado.
+O sistema apaga definitivamente os votos desta eleição, remove as datas de início e fim,
+retorna ao estado Preparação e mantém candidatos/fotos.
+Não apaga o banco PostgreSQL, usuários ou configurações. Esta operação não tem desfazer.
+
+Atualize o mesmo repositório GitHub; não altere as variáveis do Render/Supabase.
