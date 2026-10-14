@@ -1,0 +1,12 @@
+{% extends 'votacao/manage/base.html' %}
+{% block manage_content %}
+<div class="mg-heading"><div><div class="mg-eyebrow">ÁREA PROTEGIDA</div><h1>🔄 Reiniciar votação de teste</h1><p>Use somente quando quiser começar a eleição novamente.</p></div></div>
+<section class="mg-card"><h2>{{ election.title }}</h2><p>Votos registrados: <strong>{{ votes_count }}</strong> · Candidatos preservados: <strong>{{ candidates_count }}</strong></p>
+<p><strong>O que vai acontecer:</strong> os votos serão apagados permanentemente; as datas de início e encerramento serão zeradas; a eleição voltará para Preparação. Os candidatos e as fotos continuarão cadastrados.</p>
+<p><strong>Antes de continuar:</strong> <a href="{% url 'export_csv' %}">⬇ Baixe o arquivo de auditoria (CSV)</a>, caso precise guardar os votos do teste.</p>
+<form method="post" class="mg-reset-form">{% csrf_token %}
+<label for="confirmation">Digite <strong>REINICIAR</strong> para confirmar:</label><input id="confirmation" name="confirmation" type="text" autocomplete="off" required placeholder="REINICIAR">
+<label for="password">Digite sua senha de administrador:</label><input id="password" name="password" type="password" required autocomplete="current-password">
+<div class="mg-buttonrow"><button type="submit" class="mg-btn mg-red">Apagar votos e voltar à preparação</button><a href="{% url 'manage_dashboard' %}" class="mg-btn mg-muted">Cancelar</a></div></form>
+</section>
+{% endblock %}
